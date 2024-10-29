@@ -1,0 +1,8 @@
+
+---
+
+spring:
+  kafka:
+    bootstrap-servers: "https://kafka-server-359797207125.europe-central2.run.app:9092"
+    group-id: "test"
+    

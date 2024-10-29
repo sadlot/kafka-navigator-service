@@ -1,0 +1,5 @@
+pl\tsa\soft\navigator\service\consumer\NavigationSnapshotConsumer.class
+pl\tsa\soft\navigator\service\model\NavigationSnapshot.class
+pl\tsa\soft\navigator\service\NavigatorService.class
+pl\tsa\soft\navigator\service\consumer\MessageConsumer.class
+pl\tsa\soft\navigator\service\consumer\ConsumerConfiguration.class
