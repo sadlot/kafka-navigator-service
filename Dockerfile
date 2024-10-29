@@ -5,6 +5,5 @@ COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package
 
 FROM openjdk:24-slim-bullseye
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY - from=build /home/app/target/navigator-service-1.0-SNAPSHOT.jar .
+CMD ["java", "-jar", "navigator-service-1.0-SNAPSHOT.jar"]
