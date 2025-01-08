@@ -7,6 +7,7 @@ package pl.tsa.soft.navigator.service.consumer;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import pl.tsa.soft.navigator.service.model.NavigationSnapshot;
+import pl.tsa.soft.navigator.service.model.SuperNumber;
 
 /**
  *
@@ -31,7 +32,7 @@ class ConsumerConfiguration {
     private String groupId;
 
     @Bean
-    public ConsumerFactory<String, NavigationSnapshot> consumerFactory() {
+    public ConsumerFactory<String, SuperNumber> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -39,20 +40,19 @@ class ConsumerConfiguration {
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);
-        props.put(
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        props.put(
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props);
+        props.put(JsonDeserializer.TYPE_MAPPINGS, "superNumber:pl.tsa.soft.navigator.service.model.SuperNumber");
+
+        return new DefaultKafkaConsumerFactory<>(props,
+                new StringDeserializer(),
+                new JsonDeserializer()
+                        .trustedPackages("*")
+        );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, NavigationSnapshot>
-            kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, SuperNumber> kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, NavigationSnapshot> factory
+        ConcurrentKafkaListenerContainerFactory<String, SuperNumber> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
